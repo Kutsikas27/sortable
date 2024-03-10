@@ -85,6 +85,19 @@ const handlePaginationClick = (pageNumber, heroesPerPage) => {
   const endIndex = startIndex + heroesPerPage;
   console.log({ startIndex, endIndex });
   const dataToShow = heroes.slice(startIndex, endIndex);
-
+  console.log(heroes);
   updateTable(dataToShow);
+};
+const sortColumn = (column) => {
+  const sortedList = [...heroes];
+  sortedList.sort((a, b) => {
+    const valueA = a[column] ?? "";
+    const valueB = b[column] ?? "";
+    if (typeof valueA === "string") {
+      return valueA.localeCompare(valueB);
+    } else {
+      return valueA - valueB;
+    }
+  });
+  updateTable(sortedList);
 };
