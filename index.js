@@ -72,7 +72,7 @@ const initializePagination = (heroesPerPage) => {
     const a = document.createElement("a");
     a.classList.add("page-link");
     a.href = "#";
-    a.textContent = i;
+    a.textContent = String(i);
     a.onclick = () => handlePaginationClick(i, heroesPerPage);
     li.appendChild(a);
     paginationUl.appendChild(li);
@@ -80,6 +80,7 @@ const initializePagination = (heroesPerPage) => {
 };
 
 const handlePaginationClick = (pageNumber, heroesPerPage) => {
+  heroesPerPage = parseInt(heroesPerPage);
   const startIndex = (pageNumber - 1) * heroesPerPage;
   const endIndex = startIndex + heroesPerPage;
   console.log({ startIndex, endIndex });
