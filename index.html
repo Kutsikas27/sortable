@@ -13,9 +13,12 @@
     <title>sortable</title>
   </head>
   <body>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination"></ul>
+    </nav>
     <select
       class="form-select"
-      id="herosPerPage"
+      id="heroesPerPage"
       onchange="handleSelectChange()"
     >
       <option selected>Show on page</option>
@@ -41,6 +44,7 @@
           <th scope="col">Alignment</th>
         </tr>
       </thead>
+      <tbody id="tbody"></tbody>
     </table>
   </body>
   <script

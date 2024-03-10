@@ -1,67 +1,83 @@
-// @ts-nocheck
-
-const loadData = (heroes, herosPerPage) => {
-  const heroesToLoad = heroes.slice(10, 20);
-  heroesToLoad.map((hero) => {
-    addElement(hero);
-  });
-};
+const heroes = [];
 
 fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
   .then((response) => response.json())
   .then((data) => {
-    loadData(data, 20);
+    updateTable(data);
+    data.forEach((hero) => {
+      heroes.push(hero);
+    });
   });
 
 const handleSelectChange = () => {
-  fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
-    .then((response) => response.json())
-    .then((data) => {
-      const herosPerPage = document.getElementById("herosPerPage").value;
-      loadData(data, herosPerPage);
-    });
+  const heroesPerPage = parseInt(
+    document.getElementById("heroesPerPage").value
+  );
+
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
 };
 
-const addElement = (hero) => {
-  const parenttbl = document.getElementById("table");
-  const image = document.createElement("img");
-  const newTr = document.createElement("tr");
-  const newTd = document.createElement("td");
-  const newTd2 = document.createElement("td");
-  const newTd3 = document.createElement("td");
-  const newTd4 = document.createElement("td");
-  const newTd5 = document.createElement("td");
-  const newTd6 = document.createElement("td");
-  const newTd7 = document.createElement("td");
-  const newTd8 = document.createElement("td");
-  const newTd9 = document.createElement("td");
-  const newTd10 = document.createElement("td");
-  const powerstats = [];
-  Object.entries(hero.powerstats).map(([key, value]) => {
-    powerstats.push(`${key}:${value}`);
-  });
-  const trElement = parenttbl.appendChild(newTr);
-  const elementid = document.getElementsByTagName("td").length;
-  newTd.setAttribute("id", elementid);
-  image.src = hero.images.xs;
-  newTd2.innerHTML = hero.name;
-  newTd3.innerHTML = hero.biography.fullName;
-  newTd4.innerHTML = powerstats.join(", ");
-  newTd5.innerHTML = hero.appearance.race;
-  newTd6.innerHTML = hero.appearance.gender;
-  newTd7.innerHTML = hero.appearance.height;
-  newTd8.innerHTML = hero.appearance.weight;
-  newTd9.innerHTML = hero.biography.placeOfBirth;
-  newTd10.innerHTML = hero.biography.alignment;
+const getNrOfPages = (heroesPerPage) =>
+  Math.ceil(heroes.length / heroesPerPage);
 
-  trElement.appendChild(newTd).appendChild(image);
-  trElement.appendChild(newTd2);
-  trElement.appendChild(newTd3);
-  trElement.appendChild(newTd4);
-  trElement.appendChild(newTd5);
-  trElement.appendChild(newTd6);
-  trElement.appendChild(newTd7);
-  trElement.appendChild(newTd8);
-  trElement.appendChild(newTd9);
-  trElement.appendChild(newTd10);
+const updateTable = (data) => {
+  const tableBody = document.getElementById("tbody");
+  tableBody.innerHTML = "";
+  data.forEach((hero) => addToTable(hero, tableBody));
+};
+
+const addToTable = (hero, tBody) => {
+  const row = document.createElement("tr");
+
+  const image = document.createElement("img");
+  image.src = hero.images.xs;
+  row.appendChild(document.createElement("td")).appendChild(image);
+
+  const powerstats = Object.entries(hero.powerstats)
+    .map(([key, value]) => `${key}:${value}`)
+    .join(", ");
+
+  addCell(hero.name, row);
+  addCell(hero.biography.fullName, row);
+  addCell(powerstats, row);
+  addCell(hero.appearance.race, row);
+  addCell(hero.appearance.gender, row);
+  addCell(hero.appearance.height, row);
+  addCell(hero.appearance.weight, row);
+  addCell(hero.biography.placeOfBirth, row);
+  addCell(hero.biography.alignment, row);
+
+  tBody.appendChild(row);
+};
+
+const addCell = (content, row) => {
+  const cell = document.createElement("td");
+  cell.innerHTML = content;
+  row.appendChild(cell);
+};
+
+const initializePagination = (heroesPerPage) => {
+  const totalPages = getNrOfPages(heroesPerPage);
+  const paginationUl = document.getElementById("pagination");
+  paginationUl.innerHTML = "";
+
+  for (let i = 1; i <= totalPages; i++) {
+    const li = document.createElement("li");
+    li.classList.add("page-item");
+    const a = document.createElement("a");
+    a.classList.add("page-link");
+    a.href = "#";
+    a.textContent = i;
+    a.onclick = () => handlePaginationClick(i, heroesPerPage);
+    li.appendChild(a);
+    paginationUl.appendChild(li);
+  }
+};
+
+const handlePaginationClick = (pageNumber, heroesPerPage) => {
+  const startIndex = (pageNumber - 1) * heroesPerPage;
+  const endIndex = startIndex + heroesPerPage;
+  const dataToShow = heroes.slice(startIndex, endIndex);
+  updateTable(dataToShow);
 };
