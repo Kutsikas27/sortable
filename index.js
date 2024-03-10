@@ -101,3 +101,19 @@ const sortColumn = (column) => {
   });
   updateTable(sortedList);
 };
+
+ //Searchbar  Select the input field
+// Get the input field
+let searchBar = document.getElementById('searchBar');
+
+// Add an event listener to the input field
+searchBar.addEventListener('keyup', function(e) {
+  // Filter the heroes array based on the input value.
+  let searchString = e.target.value.toLowerCase();
+  let filteredHeroes = heroes.filter(hero => {
+    return hero.name.toLowerCase().includes(searchString);
+  });
+
+  // Call the updateTable function with the filtered data
+  updateTable(filteredHeroes);
+});
