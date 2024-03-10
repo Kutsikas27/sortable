@@ -88,29 +88,16 @@ const handlePaginationClick = (pageNumber, heroesPerPage) => {
   console.log(heroes);
   updateTable(dataToShow);
 };
-const sortColumn = (column) => {
-  const sortedList = [...heroes];
-  sortedList.sort((a, b) => {
-    const valueA = a[column] ?? "";
-    const valueB = b[column] ?? "";
-    if (typeof valueA === "string") {
-      return valueA.localeCompare(valueB);
-    } else {
-      return valueA - valueB;
-    }
-  });
-  updateTable(sortedList);
-};
 
- //Searchbar  Select the input field
+//Searchbar  Select the input field
 // Get the input field
-let searchBar = document.getElementById('searchBar');
+let searchBar = document.getElementById("searchBar");
 
 // Add an event listener to the input field
-searchBar.addEventListener('keyup', function(e) {
+searchBar.addEventListener("keyup", function (e) {
   // Filter the heroes array based on the input value.
   let searchString = e.target.value.toLowerCase();
-  let filteredHeroes = heroes.filter(hero => {
+  let filteredHeroes = heroes.filter((hero) => {
     return hero.name.toLowerCase().includes(searchString);
   });
 
