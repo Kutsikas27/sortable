@@ -7,13 +7,17 @@ fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
     data.forEach((hero) => {
       heroes.push(hero);
     });
+    initializePagination(20);
+    updateTable(heroes.slice(0, 20));
   });
 
-const handleSelectChange = () => {
-  const heroesPerPage = parseInt(
-    document.getElementById("heroesPerPage").value
-  );
+const handleSelectChange = (event) => {
+  let heroesPerPage = event.target.value;
 
+  if (heroesPerPage === "All") {
+    heroesPerPage = heroes.length;
+  }
+  console.log(heroesPerPage);
   updateTable(heroes.slice(0, heroesPerPage));
   initializePagination(heroesPerPage);
 };
