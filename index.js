@@ -82,6 +82,8 @@ const initializePagination = (heroesPerPage) => {
 const handlePaginationClick = (pageNumber, heroesPerPage) => {
   const startIndex = (pageNumber - 1) * heroesPerPage;
   const endIndex = startIndex + heroesPerPage;
+  console.log({ startIndex, endIndex });
   const dataToShow = heroes.slice(startIndex, endIndex);
+
   updateTable(dataToShow);
 };
