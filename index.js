@@ -340,5 +340,6 @@ searchBar.addEventListener("keyup", function (e) {
   console.log(filteredHeroes);
 
   // Call the updateTable function with the filtered data
-  updateTable(filteredHeroes);
+  updateTable(filteredHeroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
 });
