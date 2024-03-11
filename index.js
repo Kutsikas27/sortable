@@ -1,5 +1,6 @@
 const heroes = [];
 let heroesPerPage = 20;
+let searchFilter = "";
 
 fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
   .then((response) => response.json())
@@ -18,13 +19,27 @@ const handleSelectChange = (event) => {
   if (heroesPerPage === "All") {
     heroesPerPage = heroes.length;
   }
-  console.log(heroesPerPage);
-  updateTable(heroes.slice(0, heroesPerPage));
+
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 
-const getNrOfPages = (heroesPerPage) =>
-  Math.ceil(heroes.length / heroesPerPage);
+const getNrOfPages = (heroesPerPage) => {
+  if (searchFilter) {
+    const filtered = heroes.filter((hero) =>
+      hero.name.toLowerCase().includes(searchFilter)
+    );
+    return Math.ceil(filtered.length / heroesPerPage);
+  }
+  return Math.ceil(heroes.length / heroesPerPage);
+};
 
 const updateTable = (data) => {
   const tableBody = document.getElementById("tbody");
@@ -85,7 +100,12 @@ const handlePaginationClick = (pageNumber, heroesPerPage) => {
   const startIndex = (pageNumber - 1) * heroesPerPage;
   const endIndex = startIndex + heroesPerPage;
 
-  const dataToShow = heroes.slice(startIndex, endIndex);
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  const dataToShow = searchFilter
+    ? filtered.slice(startIndex, endIndex)
+    : heroes.slice(startIndex, endIndex);
 
   updateTable(dataToShow);
 };
@@ -100,8 +120,14 @@ const sortListByName = () => {
     heroes.sort((a, b) => b.name.localeCompare(a.name));
     isAscending = true;
   }
-
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 const sortListByFullName = () => {
@@ -120,9 +146,17 @@ const sortListByFullName = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
+
 const sortPowerstats = () => {
   if (isAscending) {
     heroes.sort(
@@ -152,7 +186,14 @@ const sortPowerstats = () => {
     isAscending = true;
   }
 
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 const sortRace = () => {
@@ -173,7 +214,14 @@ const sortRace = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 const sortGender = () => {
@@ -192,7 +240,14 @@ const sortGender = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 const sortHeight = () => {
@@ -235,7 +290,14 @@ const sortHeight = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 const sortWeight = () => {
@@ -276,7 +338,14 @@ const sortWeight = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 const sortPlaceOfBirth = () => {
@@ -299,7 +368,14 @@ const sortPlaceOfBirth = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 
@@ -323,7 +399,14 @@ const sortAlignment = () => {
     });
     isAscending = true;
   }
-  updateTable(heroes.slice(0, heroesPerPage));
+  const filtered = heroes.filter((hero) =>
+    hero.name.toLowerCase().includes(searchFilter)
+  );
+  updateTable(
+    searchFilter
+      ? filtered.slice(0, heroesPerPage)
+      : heroes.slice(0, heroesPerPage)
+  );
   initializePagination(heroesPerPage);
 };
 //Searchbar  Select the input field
@@ -333,11 +416,11 @@ let searchBar = document.getElementById("searchBar");
 // Add an event listener to the input field
 searchBar.addEventListener("keyup", function (e) {
   // Filter the heroes array based on the input value.
-  let searchString = e.target.value.toLowerCase();
+
+  searchFilter = e.target.value.toLowerCase();
   let filteredHeroes = heroes.filter((hero) => {
-    return hero.name.toLowerCase().includes(searchString);
+    return hero.name.toLowerCase().includes(searchFilter);
   });
-  console.log(filteredHeroes);
 
   // Call the updateTable function with the filtered data
   updateTable(filteredHeroes.slice(0, heroesPerPage));

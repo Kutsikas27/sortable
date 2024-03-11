@@ -12,56 +12,75 @@
     <link rel="stylesheet" href="styles.css" />
     <title>sortable</title>
   </head>
+
   <body>
-    <input type="text" id="searchBar" placeholder="Search superheroes..." />
-    <nav aria-label="Page navigation example">
-      <ul class="pagination"></ul>
-    </nav>
-    <select
-      class="form-select"
-      id="heroesPerPage"
-      onchange="handleSelectChange(event)"
-    >
-      <option value="10">10</option>
-      <option selected value="20">20 (default)</option>
-      <option value="50">50</option>
-      <option value="100">100</option>
-      <option value="All">All</option>
-    </select>
-    <div id="pagination" class="pagination"></div>
-    <table class="table table-striped" id="table">
-      <thead>
-        <tr>
-          <th scope="col">Icon</th>
-          <th scope="col">
-            <a type="button" onclick="sortListByName()">Name</a>
-          </th>
-          <th scope="col">
-            <a type="button" onclick="sortListByFullName()">Fullname</a>
-          </th>
-          <th scope="col">
-            <a type="button" onclick="sortPowerstats()">Powerstats</a>
-          </th>
-          <th scope="col"><a type="button" onclick="sortRace()">Race</a></th>
-          <th scope="col">
-            <a type="button" onclick="sortGender()">Gender</a>
-          </th>
-          <th scope="col">
-            <a type="button" onclick="sortHeight()">Height</a>
-          </th>
-          <th scope="col">
-            <a type="button" onclick="sortWeight()">Weight</a>
-          </th>
-          <th scope="col">
-            <a type="button" onclick="sortPlaceOfBirth()">Place of birth</a>
-          </th>
-          <th scope="col">
-            <a type="button" onclick="sortAlignment()">Alignment</a>
-          </th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
+    <div class="container">
+      <div class="d-flex flex-column mb-3">
+        <div class="p-2 align-self-center">
+          <input
+            type="text"
+            class="form-control"
+            type="text"
+            id="searchBar"
+            placeholder="Search superheroes..."
+            aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-default"
+          />
+        </div>
+
+        <div class="d-flex flex-row mb-3 align-self-center">
+          <select
+            class="form-select"
+            id="heroesPerPage"
+            onchange="handleSelectChange(event)"
+          >
+            <option value="10">10 per page</option>
+            <option selected value="20">20 (default)</option>
+            <option value="50">50 per page</option>
+            <option value="100">100 per page</option>
+            <option value="All">All</option>
+          </select>
+        </div>
+        <div class="d-flex flex-row-reverse align-self-center">
+          <div class="p-2 d-flex">
+            <div id="pagination" class="pagination d-flex flex-wrap"></div>
+          </div>
+        </div>
+      </div>
+      <table class="table table-striped" id="table">
+        <thead>
+          <tr>
+            <th scope="col">Icon</th>
+            <th scope="col">
+              <a type="button" onclick="sortListByName()">Name</a>
+            </th>
+            <th scope="col">
+              <a type="button" onclick="sortListByFullName()">Fullname</a>
+            </th>
+            <th scope="col">
+              <a type="button" onclick="sortPowerstats()">Powerstats</a>
+            </th>
+            <th scope="col"><a type="button" onclick="sortRace()">Race</a></th>
+            <th scope="col">
+              <a type="button" onclick="sortGender()">Gender</a>
+            </th>
+            <th scope="col">
+              <a type="button" onclick="sortHeight()">Height</a>
+            </th>
+            <th scope="col">
+              <a type="button" onclick="sortWeight()">Weight</a>
+            </th>
+            <th scope="col">
+              <a type="button" onclick="sortPlaceOfBirth()">Place of birth</a>
+            </th>
+            <th scope="col">
+              <a type="button" onclick="sortAlignment()">Alignment</a>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
   </body>
 
   <script
