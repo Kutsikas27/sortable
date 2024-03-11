@@ -1,4 +1,5 @@
 const heroes = [];
+let heroesPerPage = 20;
 
 fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
   .then((response) => response.json())
@@ -7,12 +8,12 @@ fetch("https://rawcdn.githack.com/akabab/superhero-api/0.2.0/api/all.json")
     data.forEach((hero) => {
       heroes.push(hero);
     });
-    initializePagination(20);
+    initializePagination(heroesPerPage);
     updateTable(heroes.slice(0, 20));
   });
 
 const handleSelectChange = (event) => {
-  let heroesPerPage = event.target.value;
+  heroesPerPage = event.target.value;
 
   if (heroesPerPage === "All") {
     heroesPerPage = heroes.length;
@@ -83,12 +84,248 @@ const handlePaginationClick = (pageNumber, heroesPerPage) => {
   heroesPerPage = parseInt(heroesPerPage);
   const startIndex = (pageNumber - 1) * heroesPerPage;
   const endIndex = startIndex + heroesPerPage;
-  console.log({ startIndex, endIndex });
+
   const dataToShow = heroes.slice(startIndex, endIndex);
-  console.log(heroes);
+
   updateTable(dataToShow);
 };
 
+let isAscending = true;
+
+const sortListByName = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => a.name.localeCompare(b.name));
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => b.name.localeCompare(a.name));
+    isAscending = true;
+  }
+
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortListByFullName = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (b.biography.fullName === "" && a.biography.fullName !== "") return -1;
+      if (a.biography.fullName === "" && b.biography.fullName !== "") return 1;
+      return a.biography.fullName.localeCompare(b.biography.fullName);
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (b.biography.fullName === "" && a.biography.fullName !== "") return -1;
+      if (a.biography.fullName === "" && b.biography.fullName !== "") return 1;
+      return b.biography.fullName.localeCompare(a.biography.fullName);
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortPowerstats = () => {
+  if (isAscending) {
+    heroes.sort(
+      (a, b) =>
+        Object.values(a.powerstats).reduce(
+          (acc, currentValue) => acc + currentValue,
+          0
+        ) -
+        Object.values(b.powerstats).reduce(
+          (acc, currentValue) => acc + currentValue,
+          0
+        )
+    );
+    isAscending = false;
+  } else {
+    heroes.sort(
+      (a, b) =>
+        Object.values(b.powerstats).reduce(
+          (acc, currentValue) => acc + currentValue,
+          0
+        ) -
+        Object.values(a.powerstats).reduce(
+          (acc, currentValue) => acc + currentValue,
+          0
+        )
+    );
+    isAscending = true;
+  }
+
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortRace = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (!a.appearance.race && !b.appearance.race) return 0;
+      if (b.appearance.race === null && a.appearance.race !== null) return -1;
+      if (a.appearance.race === null && b.appearance.race !== null) return 1;
+      return a.appearance.race.localeCompare(b.appearance.race);
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (!a.appearance.race && !b.appearance.race) return 0;
+      if (b.appearance.race === null && a.appearance.race !== null) return -1;
+      if (a.appearance.race === null && b.appearance.race !== null) return 1;
+      return b.appearance.race.localeCompare(a.appearance.race);
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortGender = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (b.appearance.gender === "-" && a.appearance.gender !== "-") return -1;
+      if (a.appearance.gender === "-" && b.appearance.gender !== "-") return 1;
+      return a.appearance.gender.localeCompare(b.appearance.gender);
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (b.appearance.gender === "-" && a.appearance.gender !== "-") return -1;
+      if (a.appearance.gender === "-" && b.appearance.gender !== "-") return 1;
+      return b.appearance.gender.localeCompare(a.appearance.gender);
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortHeight = () => {
+  const getCM = (str) => {
+    if (str === undefined) return;
+    const [first, second] = str.split(" ");
+    const num = Number(first);
+    return second === "meters" ? num * 1000 : num;
+  };
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (
+        b.appearance.height[1] === "0 cm" &&
+        a.appearance.height[1] !== "0 cm"
+      )
+        return -1;
+      if (
+        a.appearance.height[1] === "0 cm" &&
+        b.appearance.height[1] !== "0 cm"
+      )
+        return 1;
+
+      return getCM(a.appearance.height[1]) - getCM(b.appearance.height[1]);
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (
+        b.appearance.height[1] === "0 cm" &&
+        a.appearance.height[1] !== "0 cm"
+      )
+        return -1;
+      if (
+        a.appearance.height[1] === "0 cm" &&
+        b.appearance.height[1] !== "0 cm"
+      )
+        return 1;
+
+      return getCM(b.appearance.height[1]) - getCM(a.appearance.height[1]);
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortWeight = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (
+        a.appearance.weight[0] === "- lb" &&
+        b.appearance.weight[0] !== "- lb"
+      ) {
+        return 1;
+      } else if (
+        a.appearance.weight[0] !== "- lb" &&
+        b.appearance.weight[0] === "- lb"
+      ) {
+        return -1;
+      }
+      return (
+        parseInt(a.appearance.weight[0]) - parseInt(b.appearance.weight[0])
+      );
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (
+        a.appearance.weight[0] === "- lb" &&
+        b.appearance.weight[0] !== "- lb"
+      ) {
+        return 1;
+      } else if (
+        a.appearance.weight[0] !== "- lb" &&
+        b.appearance.weight[0] === "- lb"
+      ) {
+        return -1;
+      }
+      return (
+        parseInt(b.appearance.weight[0]) - parseInt(a.appearance.weight[0])
+      );
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+const sortPlaceOfBirth = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (b.biography.placeOfBirth === "-" && a.biography.placeOfBirth !== "-")
+        return -1;
+      if (a.biography.placeOfBirth === "-" && b.biography.placeOfBirth !== "-")
+        return 1;
+      return a.biography.placeOfBirth.localeCompare(b.biography.placeOfBirth);
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (b.biography.placeOfBirth === "-" && a.biography.placeOfBirth !== "-")
+        return -1;
+      if (a.biography.placeOfBirth === "-" && b.biography.placeOfBirth !== "-")
+        return 1;
+      return b.biography.placeOfBirth.localeCompare(a.biography.placeOfBirth);
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
+
+const sortAlignment = () => {
+  if (isAscending) {
+    heroes.sort((a, b) => {
+      if (b.biography.alignment === "-" && a.biography.alignment !== "-")
+        return -1;
+      if (a.biography.alignment === "-" && b.biography.alignment !== "-")
+        return 1;
+      return a.biography.alignment.localeCompare(b.biography.alignment);
+    });
+    isAscending = false;
+  } else {
+    heroes.sort((a, b) => {
+      if (b.biography.alignment === "-" && a.biography.alignment !== "-")
+        return -1;
+      if (a.biography.alignment === "-" && b.biography.alignment !== "-")
+        return 1;
+      return b.biography.alignment.localeCompare(a.biography.alignment);
+    });
+    isAscending = true;
+  }
+  updateTable(heroes.slice(0, heroesPerPage));
+  initializePagination(heroesPerPage);
+};
 //Searchbar  Select the input field
 // Get the input field
 let searchBar = document.getElementById("searchBar");
@@ -100,6 +337,7 @@ searchBar.addEventListener("keyup", function (e) {
   let filteredHeroes = heroes.filter((hero) => {
     return hero.name.toLowerCase().includes(searchString);
   });
+  console.log(filteredHeroes);
 
   // Call the updateTable function with the filtered data
   updateTable(filteredHeroes);
